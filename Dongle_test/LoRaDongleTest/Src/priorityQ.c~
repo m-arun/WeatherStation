@@ -1,0 +1,77 @@
+#include"priorityQ.h"
+
+ 
+void push(uint8_t item,uint8_t item_priority)
+{
+	struct node *tmp,*p;
+	uint8_t memerr = 0; 
+	tmp=(struct node *)malloc(sizeof(struct node));
+	if(tmp==NULL)
+	{
+		memerr = 1;//pruint8_tf("\nMemory not available\n");
+		return;
+	}
+	tmp->info=item;
+	tmp->priority=item_priority;
+	/*Queue is empty or item to be added has priority more than first element*/
+	if( isEmpty() || item_priority < front->priority )
+	{
+		tmp->link=front;
+		front=tmp;
+	}
+	else
+	{
+		p = front;
+		while( p->link!=NULL && p->link->priority<=item_priority )
+			p=p->link;
+		tmp->link=p->link;
+		p->link=tmp;
+	}
+}/*End of insert()*/
+ 
+uint8_t pop()
+{
+	struct node *tmp;
+	uint8_t item;
+	uint8_t Qerr = 0;
+	if( isEmpty() )
+	{
+		Qerr = 1;//pruint8_tf("\nQueue Underflow\n");
+		exit(1);
+	}
+	else
+	{
+		tmp=front;
+		item=tmp->info;
+		front=front->link;
+		free(tmp);
+	}
+	return item;
+}/*End of del()*/
+ 
+uint8_t isEmpty()
+{
+	if( front == NULL )
+		return 1;
+	else
+		return 0;
+ 
+}/*End of isEmpty()*/
+ 
+ 
+void display()
+{
+	struct node *ptr;
+	ptr=front;
+	if( isEmpty() )
+		pruint8_tf("\nQueue is empty\n");
+	else
+	{	pruint8_tf("\nQueue is :\n");
+		pruint8_tf("\nPriority       Item\n");
+		while(ptr!=NULL)
+		{
+			pruint8_tf("%5d        %5d\n",ptr->priority,ptr->info);
+			ptr=ptr->link;
+		}
+	}
+}/*End of display() */
