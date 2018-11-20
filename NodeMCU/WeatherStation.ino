@@ -3,6 +3,12 @@
 
 Ticker vaneTimer;
 
+#define averagingTime 5000
+#define cupSizeMPH 1.492
+#define cupSizeKMPH 2.4
+#define bucketSizeINCH 0.011
+#define bucketSizeMM 00.2794
+
 #define windSensorPin (4) //D2 in ESP
 #define rainSensorPin (5) //D1 in ESP
 
@@ -29,9 +35,10 @@ int Maximum;
 int cardinalPoint;
 int Degree;
 
+String weatherMeasures;
+
 
 void windDirection() {
-  int i;
   vaneValue = analogRead(A0);
   Direction = map(vaneValue, 0, 1023, 0, 360);
 
@@ -58,12 +65,6 @@ void windDirection() {
     Heading[7]++;
   else if (calDirection < 360)  //West 
     Heading[6]++;
-//  else 
-//    Heading[3]++;
-//  for (i= 0; i < 8; i++){
-//    Serial.print("HEADING ");Serial.print(i);Serial.print("\t");
-//    Serial.println(Heading[i]);
-//  }
 }
 
 void setup() {  
@@ -83,27 +84,25 @@ void loop() {
   Tips = 0;
 
   sei();
-  delay (10000);
+  delay (averagingTime);
   cli();
 
-  windSpeed = (Rotations * 1.492) / 10;
-  Speed = (Rotations * 2.4) / 10;
-  Precipitation = (Tips * 0.2794) / 10;
+  windSpeed = (Rotations * cupSizeMPH) / (averagingTime/1000);
+  Speed = (Rotations * cupSizeKMPH) / (averagingTime/1000);
+  Precipitation = (Tips * bucketSizeMM) / (averagingTime/1000);
 
   Maximum = Heading[0];
   cardinalPoint = 1;
-//  for (i = 0; i < 10; i++)
   for (i = 0; i < 8; i++)
   {
     if (Heading[i] > Maximum)
     {
       Maximum  = Heading[i];
-//      cardinalPoint = i;
       cardinalPoint = i+1;
     }
   }
-  Serial.println(i);
-  Serial.println(cardinalPoint);
+//  Serial.println(i);
+//  Serial.println(cardinalPoint);
   if (cardinalPoint == 1)
     Degree = 0;
   else if (cardinalPoint == 2)
@@ -123,10 +122,9 @@ void loop() {
   else
     Degree = 404;
 
-//  for (i = 0; i < 10; i++)
   for (i = 0; i < 8; i++)
     Heading[i] = 0;
-
+//
 //  Serial.print(Rotations);
 //  Serial.print("\t\t\t\t");
 //  Serial.print(windSpeed);
@@ -137,8 +135,15 @@ void loop() {
 //  Serial.print("\t\t");
 //  Serial.print(Precipitation);
 //  Serial.print("\t\t\t");
-  Serial.print("Degree");
-  Serial.println(Degree);
+//  Serial.print("Degree");
+//  Serial.println(Degree);
+  weatherMeasures += String(Speed);
+  weatherMeasures += ",";
+  weatherMeasures += String(Degree);
+  weatherMeasures += ",";
+  weatherMeasures += String(Precipitation);
+  Serial.println(weatherMeasures);
+  weatherMeasures = "";
 }
 
 void isr_rotation () {
