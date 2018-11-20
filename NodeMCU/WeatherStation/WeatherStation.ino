@@ -3,20 +3,20 @@
 
 Ticker vaneTimer;
 
-#define averagingTime 5000
-#define cupSizeMPH 1.492
-#define cupSizeKMPH 2.4
-#define bucketSizeINCH 0.011
-#define bucketSizeMM 00.2794
+#define averagingTime   120000    //Averaging wind speed, direction and rainfall for a span of 2 Minutes.
+#define cupSizeMPH      1.492
+#define cupSizeKMPH     2.4
+#define bucketSizeINCH  0.011
+#define bucketSizeMM    0.2794
 
-#define windSensorPin (4) //D2 in ESP
-#define rainSensorPin (5) //D1 in ESP
+#define windSensorPin   (4) //D2 in ESP
+#define rainSensorPin   (5) //D1 in ESP
 
 //#define windSensorPin (2)   //Arduino Uno
 //#define rainSensorPin (3)   //Arduino Uno
 
-#define offset 0
-
+#define offset          0       // (+/-) orientation correction for wind vane, if vane pointer's North mismatches with magnetic North and geometric North .
+  
 volatile unsigned long Rotations;
 volatile unsigned long windContactBounceTime;
 
@@ -25,15 +25,15 @@ volatile unsigned long rainContactBounceTime;
 
 volatile int Heading[8] = {0};
 
-float windSpeed;
-float Speed;
-float Precipitation;
+float windSpeed;            // Holds wind speed in MPH
+float Speed;                // Holds wind speed in KMPH
+float Precipitation;        // Holds rainfall in MM
 int vaneValue;              // raw analog value from wind vane
 int Direction;              // translated 0 - 360 direction
 int calDirection;           // converted value with offset applied
-int Maximum;
-int cardinalPoint;
-int Degree;
+int Maximum;                // Maximum count of cardinal point array
+int cardinalPoint;          
+int Degree;                 // Wind Direction in Degrees, North=0, North-East=45, East=90, ..., North-West=315. 
 
 String weatherMeasures;
 
