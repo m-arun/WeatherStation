@@ -29,7 +29,7 @@ client.on_connect = on_connect
 client.on_message = on_message
 client.username_pw_set("loraserver","loraserver")
 
-client.connect("gateways.rbccps.org", 1883, 45)
+client.connect("gateways.rbccps.org", 1883, 145)
 client.loop_forever()
 
 

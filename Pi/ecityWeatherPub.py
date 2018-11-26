@@ -7,7 +7,7 @@ import serial
 
 MQTT_HOST = "gateways.rbccps.org"
 MQTT_PORT = 1883
-MQTT_KEEPALIVE_INTERVAL = 45
+MQTT_KEEPALIVE_INTERVAL = 145
 
 MQTT_TOPIC = "e-city/weatherstation"
 MQTT_USERNAME = "loraserver"
